@@ -101,7 +101,7 @@
     dms:catchupStateAction "generic/catchupState";
     dms:publishStateAction "generic/publishState";
     dms:publishAction      "generic/dupublish";
-    dms:operation :clearCacheOp;
+    dms:operation :clearCacheOp, :upgradeOp;
     .
 
 :productionServers a dms:Tier;
@@ -123,7 +123,7 @@
     dms:catchupStateAction "generic/catchupState";
     dms:publishStateAction "generic/publishState";
     dms:publishAction      "generic/dupublish";
-    dms:operation :clearCacheOp;
+    dms:operation :clearCacheOp, :upgradeOp;
     .
 
 :pdataLB a dms:LoadBalancer;
@@ -140,3 +140,9 @@
     dms:tierOnly true;
     .
 
+:upgradeOp
+    rdfs:label "Upgrade server";
+    dms:action "default/upgrade";
+    skos:notation "upgradeOp";
+    dms:removeFromLB true;
+    .
