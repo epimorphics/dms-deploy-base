@@ -80,6 +80,28 @@ findLastDump() {
     return 1
 }
 
+# Lock a server, remove it from the LB if any and mark it as suspended
+# Usage suspendServer serverDir
+suspendServer() {
+    [[ $# = 1 ]] || { echo "Internal error calling $0" 1>&2 ; exit 1 ; }
+    local serverDir="$1"
+    if mkdir $serverDir/lock; then
+        ops/removeserver-lb.sh $serverDir && echo "Prepared" > $serverDir/status && return 0
+    else
+        echo "Failed to lock server"
+    fi
+    return 1
+}
+
+# Unsuspend a server, just adds it to LB and removes lock, doesn't perform any catchup hence not called "activate"
+unsuspendServer() {
+    [[ $# = 1 ]] || { echo "Internal error calling $0" 1>&2 ; exit 1 ; }
+    local serverDir="$1"
+    ops/addserver-lb.sh $serverDir
+    echo "Running" > $serverDir/status
+    rmdir $serverDir/lock
+}
+
 # Acquire a lock on a tier, waits for up to 90s
 lockTier() {
     [[ $# = 1 ]] || { echo "Internal error calling $0" 1>&2 ; exit 1 ; }
