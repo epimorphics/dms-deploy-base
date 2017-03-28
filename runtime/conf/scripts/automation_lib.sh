@@ -119,5 +119,5 @@ lockTier() {
 unlockTier() {
     [[ $# = 1 ]] || { echo "Internal error calling $0" 1>&2 ; exit 1 ; }
     local tierDir="$1"
-    rm -f $tierDir/lock    
+    rmdir $tierDir/lock    
 }
